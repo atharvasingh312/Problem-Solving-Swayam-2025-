@@ -1,4 +1,4 @@
-https://www.geeksforgeeks.org/problems/find-nth-root-of-m5843/1
+//https://www.geeksforgeeks.org/problems/find-nth-root-of-m5843/1
 
 
 class Solution{
