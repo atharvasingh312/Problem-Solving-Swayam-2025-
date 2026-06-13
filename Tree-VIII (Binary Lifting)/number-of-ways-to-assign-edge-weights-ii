@@ -1,0 +1,98 @@
+class Solution {
+public:
+    long long MOD=1e9+7;
+
+    long long power(long long a,long long b){
+        if(b==0) return 1;
+        long long half=power(a,b/2);
+        half=(half*half)%MOD;
+        if(b&1) half=(half*a)%MOD;
+        return half;
+    }
+
+    void dfs(int par,int node,int level,vector<vector<int>> &adj,vector<int> &depth,vector<vector<int>> &dp){
+        depth[node]=level;
+        dp[node][0]=par;
+        for(auto &x:adj[node]){
+            if(x!=par) dfs(node,x,level+1,adj,depth,dp);
+        }
+    }
+
+    int getJump(int node,int x,vector<vector<int>> &dp){
+        if(node==-1) return -1;
+        if(x==0) return dp[node][0];
+        else if(dp[node][x]!=INT_MIN) return dp[node][x];
+        int half=getJump(node,x-1,dp);
+        if(half==-1) return -1;
+        return dp[node][x]=getJump(half,x-1,dp);
+    }
+
+    int solve(int u,int v,vector<int> &depth,vector<vector<int>> &dp){
+        int k=0;
+
+        if(depth[u]<depth[v]){
+            k=depth[v]-depth[u];
+            for(int i=0;i<32;i++){
+                if((k>>i)&1) v=getJump(v,i,dp);
+            }
+        }
+        else{
+            k=depth[u]-depth[v];
+            for(int i=0;i<32;i++){
+                if((k>>i)&1) u=getJump(u,i,dp);
+            }
+        }
+
+        if(u==v) return k;
+
+        int length=0;
+
+        for(int j=dp[0].size()-1;j>=0;j--){
+            int au=getJump(u,j,dp),av=getJump(v,j,dp);
+            if(au==-1) continue;
+            else if(au!=av){
+                length+=(1<<j);
+                u=au;
+                v=av;
+            }
+        }
+
+        length++;
+        return 2*length+k;
+    }
+
+    vector<int> assignEdgeWeights(vector<vector<int>>& edges, vector<vector<int>>& queries) {
+        int n=edges.size()+1;
+        vector<vector<int>> adj(n);
+
+        for(auto &x:edges){
+            int u=x[0],v=x[1];
+            u--;
+            v--;
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+
+        vector<int> depth(n,0);
+        int mx_depth=log2(n)+1;
+        vector<int> ans;
+        vector<vector<int>> dp(n,vector<int>(mx_depth,INT_MIN));
+
+        dfs(-1,0,0,adj,depth,dp);
+
+        for(int i=0;i<queries.size();i++){
+            int u=queries[i][0],v=queries[i][1];
+            u--;
+            v--;
+            if(u==v){
+                ans.push_back(0);
+                continue;
+            }
+            int dist=solve(u,v,depth,dp);
+            int perm=power(2,dist-1);
+            ans.push_back(perm);
+        }
+
+        return ans;
+    }
+};
