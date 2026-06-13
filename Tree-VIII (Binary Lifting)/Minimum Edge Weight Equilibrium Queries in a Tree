@@ -1,0 +1,89 @@
+class Solution {
+public:
+    vector<int> depth;
+    vector<vector<int>> wfreq;
+    vector<vector<vector<int>>> adj;
+    vector<vector<int>> dp;
+    void dfs(int par,int node,int level,vector<int> &freq){
+        depth[node]=level;
+        wfreq[node]=freq;
+        dp[node][0]=par;
+        for(auto &x:adj[node]){
+            if(par!=x[0]){
+                freq[x[1]]++;
+                dfs(node,x[0],level+1,freq);
+                freq[x[1]]--;
+            }
+        }
+    } 
+    int getJump(int node,int x){
+        if(node==-1) return -1;
+        if(x==0) return dp[node][0];
+        else if(dp[node][x]!=INT_MIN) return dp[node][x];
+        int half=getJump(node,x-1);
+        if(half==-1) return -1;
+        return dp[node][x]=getJump(half,x-1);
+    }
+
+    int solve(int u,int v){
+        int k=0,ou=u,ov=v;
+
+        if(depth[u]<depth[v]){
+            k=depth[v]-depth[u];
+            for(int i=0;i<32;i++){
+                if((k>>i)&1) v=getJump(v,i);
+            }
+        }
+        else{
+            k=depth[u]-depth[v];
+            for(int i=0;i<32;i++){
+                if((k>>i)&1) u=getJump(u,i);
+            }
+        }
+        if(u==v){
+            int lca=u;
+            int count=0,mxcommon=0;
+            for(int i=1;i<=26;i++){
+                int f=wfreq[ou][i]+wfreq[ov][i]-2*wfreq[lca][i];
+                count+=f;
+                mxcommon=max(mxcommon,f);
+            }
+            return count-mxcommon;
+        }
+        for(int j=dp[0].size()-1;j>=0;j--){
+            int au=getJump(u,j),av=getJump(v,j);
+            if(au==-1) continue;
+            else if(au!=av){
+                u=au;
+                v=av;
+            }
+        }
+        int lca=dp[u][0];
+        int count=0,mxcommon=0;
+        for(int i=0;i<27;i++){
+            int f=wfreq[ou][i]+wfreq[ov][i]-(2*wfreq[lca][i]);
+            count+=f;
+            mxcommon=max(mxcommon,f);
+        }
+        return count-mxcommon;
+    }
+    vector<int> minOperationsQueries(int n, vector<vector<int>>& edges, vector<vector<int>>& queries) {
+        depth.resize(n+1,0);
+        wfreq.resize(n+1,vector<int>(27,0));
+        int mx_depth=log2(n)+1;
+        dp.resize(n+1,vector<int>(mx_depth,INT_MIN));
+        adj.resize(n+1);
+        for(auto &x:edges){
+            int u=x[0],v=x[1],w=x[2];
+            adj[u].push_back({v,w});
+            adj[v].push_back({u,w});
+        }
+        vector<int> freq(27,0);
+        dfs(-1,0,0,freq);
+        vector<int> ans;
+        for(auto &x:queries){
+            ans.push_back(solve(x[0],x[1]));
+        }
+        return ans;
+    }
+};
