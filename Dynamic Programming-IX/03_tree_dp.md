@@ -2,16 +2,18 @@
 
 State: `dp[node][state]`
 
-## Core Problems
+### Core
 
-- [ ] [337. House Robber III](https://leetcode.com/problems/house-robber-iii/) — learned something new
-- [ ] [124. Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/)
-- [ ] [968. Binary Tree Cameras](https://leetcode.com/problems/binary-tree-cameras/) — hard and non-intuitive
-- [ ] [834. Sum of Distances in Tree](https://leetcode.com/problems/sum-of-distances-in-tree/) — DP rerooting
-- [ ] [2246. Longest Path With Different Adjacent Characters](https://leetcode.com/problems/longest-path-with-different-adjacent-characters/)
-- [ ] [310. Minimum Height Trees](https://leetcode.com/problems/minimum-height-trees/) — hard and non-intuitive
+| Done | Problem | Remarks |
+|---|---|---|
+| [ ] | [337. House Robber III](https://leetcode.com/problems/house-robber-iii/) | learnt something new |
+| [ ] | [124. Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/) | okayishh |
+| [ ] | [968. Binary Tree Cameras](https://leetcode.com/problems/binary-tree-cameras/) | hard, non intutive, different |
+| [ ] | [834. Sum of Distances in Tree](https://leetcode.com/problems/sum-of-distances-in-tree/) | Hard, Concept: DP rerooting |
+| [ ] | [2246. Longest Path With Different Adjacent Characters](https://leetcode.com/problems/longest-path-with-different-adjacent-characters/) | Good question, did it in one go |
+| [ ] | [310. Minimum Height Trees](https://leetcode.com/problems/minimum-height-trees/) | Hard, non intutive |
 
-## Milestones
+### Milestones
 
-- 337 + 968 → good
-- 834 → very strong
+- If you solve: **337 + 968** → good
+- If you solve: **834** → very strong
